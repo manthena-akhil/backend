@@ -1,0 +1,6 @@
+
+target/
+startup.log
+.env
+.env.*
+!.env.example

@@ -15,17 +15,20 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class HistoryServiceTest {
-    @Mock WeatherHistoryRepository repo;
-    @Mock UserService userService;
+    @Mock
+    WeatherHistoryRepository repo;
+    @Mock
+    UserService userService;
 
     private User user() {
         User u = mock(User.class);
-        when(u.getId()).thenReturn(1L);
-        when(userService.getByEmail("a@b.com")).thenReturn(u);
+        lenient().when(u.getId()).thenReturn(1L);
+        lenient().when(userService.getByEmail("a@b.com")).thenReturn(u);
         return u;
     }
 
@@ -52,7 +55,8 @@ class HistoryServiceTest {
     void deleteMissingRecordFails() {
         user();
         when(repo.findByIdAndUserId(3L, 1L)).thenReturn(Optional.empty());
-        assertThrows(ResourceNotFoundException.class, () -> new HistoryService(repo, userService).delete("a@b.com", 3L));
+        assertThrows(ResourceNotFoundException.class,
+                () -> new HistoryService(repo, userService).delete("a@b.com", 3L));
     }
 
     @Test
